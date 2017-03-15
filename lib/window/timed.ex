@@ -1,5 +1,12 @@
 defmodule Window.Timed do
   defstruct duration: nil, items: :queue.new()
+
+  def time_span(%Window.Timed{items: items}) do
+    case {:queue.peek(items), :queue.peek_r(items)} do
+      {{:value, {last, _}}, {:value, {first, _}}} -> last - first
+      _ -> 0
+    end
+  end
 end
 
 defimpl Windowable, for: Window.Timed do
