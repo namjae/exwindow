@@ -26,4 +26,17 @@ defmodule Window.TimedTest do
         Window.add({6, 1})
     assert Enum.count(Window.items(w)) == 4
   end
+
+  test "flooded?" do
+    w = %Window.Timed{ duration: 2 } |>
+         Window.add({1, :a})
+    refute w.flooded?
+    w = w |> Window.add({2, :b})
+    refute w.flooded?
+    w = w |> Window.add({3, :c})
+    assert w.flooded?
+    w = w |> Window.add({4, :d})
+    assert w.flooded?
+  end
+
 end

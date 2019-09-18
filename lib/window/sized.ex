@@ -1,8 +1,17 @@
 defmodule Window.Sized do
-  defstruct size: nil, items: :queue.new()
+  defstruct size: nil, items: :queue.new(), flooded?: false
 end
 
 defimpl Windowable, for: Window.Sized do
+  def add(window = %Window.Sized{size: size, items: items, flooded?: false}, item) do
+    if :queue.len(items) == size do
+      {_, q} = :queue.out_r(items)
+      %{ window | items: :queue.in_r(item, q), flooded?: true}
+    else
+      %{ window | items: :queue.in_r(item, items)}
+    end
+  end
+
   def add(window = %Window.Sized{size: size, items: items}, item) do
     if :queue.len(items) == size do
       {_, q} = :queue.out_r(items)

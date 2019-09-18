@@ -26,4 +26,16 @@ defmodule Window.SizedTest do
          Window.add(6)
     assert Enum.count(Window.items(w)) == 5
   end
+
+  test "flooded?" do
+    w = %Window.Sized{ size: 2 } |>
+         Window.add(1)
+    refute w.flooded?
+    w = w |> Window.add(2)
+    refute w.flooded?
+    w = w |> Window.add(3)
+    assert w.flooded?
+    w = w |> Window.add(4)
+    assert w.flooded?
+  end
 end
